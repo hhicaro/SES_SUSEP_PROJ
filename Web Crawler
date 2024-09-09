@@ -71,3 +71,24 @@ dt_ini <- 201501
   remove(tt,destfile, lista)
   
 } SES_Balanco.CSV  
+
+
+
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#                                 Seleção de empresas    
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{
+  LISTAEMPRESAS <- read_delim("https://www2.susep.gov.br/menuestatistica/SES/download/LISTAEMPRESAS.csv", 
+                              ";", escape_double = FALSE, col_types = cols(CNPJ = col_character(), 
+                                                                           CodigoFIP = col_double(), NomeEntidade = col_character()), 
+                              locale = locale(encoding = "ISO-8859-1"), 
+                              trim_ws = TRUE) ; colnames(LISTAEMPRESAS)[colnames(LISTAEMPRESAS) == 'CodigoFIP'] <- 'coenti'
+  
+  
+} # LISTAEMPRESAS
+
+
+

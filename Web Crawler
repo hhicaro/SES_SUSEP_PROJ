@@ -1,0 +1,73 @@
+# Escolha a data inicial:
+
+dt_ini <- 201501
+
+#   IMPORTAÇÃO DE PACOTES 
+{
+  # Check if the packages that we need are installed
+  want = c("readxl", "ggplot2","data.table","dplyr","lubridate","readr")
+  have = want %in% rownames(installed.packages())
+  
+  # Install the packages that we miss
+  if ( any(!have) ) { install.packages( want[!have] ) }
+  
+  # Load the packages
+  junk <- lapply(want, library, character.only = T)
+  
+  # Remove the objects we created
+  rm(have, want, junk) 
+} 
+
+
+
+
+-------------------------------> #Web Crawler
+
+
+
+
+#   Base de dados principal  ----------------------------------------------------------------------
+{
+  # codigo pra a impotação local : 
+  
+  SES_BALANCO <- as.data.frame(read_delim("C:/Users/EST14230/Downloads/Estudos em R/SES_Balanco.csv",
+                                           ";", escape_double = FALSE, col_types = cols(coenti = col_number(),
+                                                                                        cmpid = col_double(),
+                                                                                        damesano = col_date(format = "%Y%m"),
+                                                                                        quadro = col_skip(), seq = col_skip()),
+                                           locale = locale(decimal_mark = ","),
+                                           trim_ws = TRUE))
+   
+  
+  # Código para dowload da base SUSEP, extrção .zip e importação SES_Balanco.csv (apos o dowload, o arquivo zip e a extração do mesmo será excluida automaticamente)
+  # Não é preciso configurar um diretório, pois tudo sera salvo na pasta TEMP do sistema operacional e apos importação.
+  
+  
+  destfile<- tempdir()
+  destfile <- "C:/Users/EST14230/Downloads/BaseCompleta.zip"
+  download.file(url="https://www2.susep.gov.br/download/estatisticas/BaseCompleta.zip",
+                destfile = paste0(destfile,"/BaseCompleta.zip")
+  
+  
+  lista<-unzip(paste0(destfile,"/BaseCompleta.zip"),
+               list = TRUE)[34,1]
+  
+  files<-unzip(paste0(destfile,"/BaseCompleta.zip"), files= "SES_Balanco.csv",
+               exdir= destfile)
+  
+  
+  SES_BALANCO <-as.data.frame(read_delim(files,
+                                         ";", escape_double = FALSE, col_types = cols(coenti = col_number(),
+                                                                                      cmpid = col_double(),
+                                                                                      damesano = col_date(format = "%Y%m"),
+                                                                                      quadro = col_skip(), seq = col_skip()),
+                                         locale = locale(decimal_mark = ","),
+                                         trim_ws = TRUE))
+  file.remove(files)
+  
+  tt= paste0(destfile,"/BaseCompleta.zip")
+  
+  file.remove(tt)
+  remove(tt,destfile, lista)
+  
+} SES_Balanco.CSV  
